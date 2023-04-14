@@ -55,21 +55,17 @@ const PhotoScreen = () => {
       </Camera> : <Text>La permission est refusé</Text>}
     </View>
   </View>
-}tt
+}
 const AudioScreen = () => {
 
   async function record(){
     await Audio.requestPermissionsAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
+    const {sound} = await Audio.Sound.createAsync();
   }
   
   return <Vew>
     <Text>Audio</Text>
     <View style={styles.container}>
-      {permissions...}
     </View>
   </Vew>
 }
