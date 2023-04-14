@@ -47,7 +47,7 @@ const PhotoScreen = () => {
       </Camera> : <Text>La permission est refusé</Text>}
     </View>
   </View>
-}
+}tt
 const AudioScreen = () => {
 
   async function record(){
