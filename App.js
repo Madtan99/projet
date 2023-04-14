@@ -31,40 +31,46 @@ const PhotoScreen = () => {
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
+
+  requestPermission();
   
-  return <View>
-  <Text>Photo</Text>
-  <View style={styles.container}>
-    <Camera style={styles.camera} type={type}>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-          <Text style={styles.text}>Flip Camera</Text>
-        </TouchableOpacity>
-      </View>
-    </Camera>
+  return <View>   
+    <Text>Photo</Text>
+    <View style={styles.container}>
+      {permission && permission.granted ? <Camera style={styles.camera} type={type}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+            <Text style={styles.text}>Flip Camera</Text>
+          </TouchableOpacity>
+        </View>
+      </Camera> : <Text>La permission est refusé</Text>}
+    </View>
   </View>
-</View>
 }
 const AudioScreen = () => <View><Text>Audio</Text></View>
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
   },
-  button: {
-
-  },
   camera: {
-
+    flex: 1,
   },
   buttonContainer: {
-
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    margin: 64,
+  },
+  button: {
+    flex: 1,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
   },
   text: {
-    
-  }
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+  },
 });
