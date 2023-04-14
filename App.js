@@ -28,9 +28,14 @@ const HomeScreen = ({navigation}) => <View><Text>Accueil</Text></View>
 const PhotoScreen = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [type, setType] = useState(CameraType.back);
-  
+  const [zoom, setZoom] = useState(0);
+
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+  }
+
+  function toggleZoom(){
+    setZoom(zoom == 1 ? 0 : 1);
   }
 
   requestPermission();
@@ -38,10 +43,13 @@ const PhotoScreen = () => {
   return <View>   
     <Text>Photo</Text>
     <View style={styles.container}>
-      {permission && permission.granted ? <Camera style={styles.camera} type={type}>
+      {permission && permission.granted ? <Camera style={styles.camera} type={type} zoom={zoom}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             <Text style={styles.text}>Flip Camera</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={toggleZoom}>
+            <Text style={styles.text}>Zoom</Text>
           </TouchableOpacity>
         </View>
       </Camera> : <Text>La permission est refusé</Text>}
@@ -68,11 +76,12 @@ const AudioScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    width: 400,
+    height: 400
   },
   camera: {
-    flex: 1,
+    width:400,
+    height: 500
   },
   buttonContainer: {
     flex: 1,
