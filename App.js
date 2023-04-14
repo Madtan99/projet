@@ -49,7 +49,21 @@ const PhotoScreen = () => {
   </View>
 }
 const AudioScreen = () => {
+
+  async function record(){
+    await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+  }
   
+  return <Vew>
+    <Text>Audio</Text>
+    <View style={styles.container}>
+      {permissions...}
+    </View>
+  </Vew>
 }
 
 const styles = StyleSheet.create({
