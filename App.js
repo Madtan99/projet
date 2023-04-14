@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
+import { Audio } from 'expo-av';
 
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -45,7 +46,9 @@ const PhotoScreen = () => {
   </View>
 </View>
 }
-const AudioScreen = () => <View><Text>Audio</Text></View>
+const AudioScreen = () => {
+  
+}
 
 const styles = StyleSheet.create({
   container: {
