@@ -1,16 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View, Button, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 
 const Tab = createBottomTabNavigator();
 export default function App() {
-  const [type, setType] = useState(CameraType.back);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
-
   return (
-    <NavigationContainer>
+    <NavigationContainer >
       <Tab.Navigator initialRouteName="Home" >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Photo" component={PhotoScreen}/>
@@ -24,12 +21,18 @@ export default function App() {
 
   if (!permission.granted) ... */
 
+  
+}
+const HomeScreen = ({navigation}) => <View><Text>Accueil</Text></View>
+const PhotoScreen = () => {
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [type, setType] = useState(CameraType.back);
+  
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
-}
-const HomeScreen = ({navigation}) => <View><Text>Accueil</Text></View>
-const PhotoScreen = () => <View>
+  
+  return <View>
   <Text>Photo</Text>
   <View style={styles.container}>
     <Camera style={styles.camera} type={type}>
@@ -41,6 +44,7 @@ const PhotoScreen = () => <View>
     </Camera>
   </View>
 </View>
+}
 const AudioScreen = () => <View><Text>Audio</Text></View>
 
 const styles = StyleSheet.create({
