@@ -60,7 +60,8 @@ const AudioScreen = () => {
 
   async function record(){
     await Audio.requestPermissionsAsync();
-    const {sound} = await Audio.Sound.createAsync();
+    const {sound} = await Audio.Sound.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+    
   }
   
   return <Vew>
