@@ -80,18 +80,29 @@ const PhotoScreen = () => {
 const AudioScreen = () => {
   const [audioPerm, requestAudioPerm] = Audio.requestPermissionsAsync();
   const [recording, setRecording] = useState();
-  async function record(){
-    await Audio.requestPermissionsAsync();
-    const {recording} = await Audio.Sound.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-    
-    if(!audioPerm) requestAudioPerm();
-
-    setRecording(recording);
+  async function startRecording(){
+    try{
+      await Audio.requestPermissionsAsync();
+      const {recording} = await Audio.Sound.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+      
+      if(!audioPerm) requestAudioPerm();
+  
+      setRecording(recording);
+    }
+    catch(error){
+      console.error("Tentative d'enregistrement à échoué", error);
+    }
+  }
+  async function stopRecording(){
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
   }
   
   return <Vew>
           <Text>Audio</Text>
           <View style={styles.container}>
+            <Button title={recording ? 'Stop Recording' : 'Start Recording'} onPress={recording? stopRecording : startRecording}></Button>
           </View>
         </Vew>
 }
