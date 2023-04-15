@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity } from 'rea
 import * as MediaLibrary from 'expo-media-library';
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
+import { Audio } from 'expo-av';
 
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -76,7 +77,20 @@ const PhotoScreen = () => {
     </View>
   </View>
 }
-const AudioScreen = () => <View><Text>Audio</Text></View>
+const AudioScreen = () => {
+
+  async function record(){
+    await Audio.requestPermissionsAsync();
+    const {sound} = await Audio.Sound.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+    
+  }
+  
+  return <Vew>
+    <Text>Audio</Text>
+    <View style={styles.container}>
+    </View>
+  </Vew>
+}
 
 const styles = StyleSheet.create({
   container: {
