@@ -1,30 +1,28 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity, ToastAndroid } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Audio } from 'expo-av';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer >
       <Tab.Navigator initialRouteName="Home" >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Photo" component={PhotoScreen}/>
-      <Tab.Screen name="Audio" component={AudioScreen}/>
+      <Tab.Screen name="Home" component={HomeScreen} options={{tabBarIcon: ({size, focused, color}) => 
+        <Ionicons name="home" size={size} color="#000" />}} />
+      <Tab.Screen name="Photo" component={PhotoScreen} options={{tabBarIcon: ({size, focused, color}) => 
+        <Ionicons name="camera" size={size} color="#000" />}} />
+      <Tab.Screen name="Audio" component={AudioScreen} options={{tabBarIcon: ({size, focused, color}) => 
+        <Ionicons name="mic" size={size} color="#000" />}} />
       </Tab.Navigator>
     </NavigationContainer>
   );
-
-
-  /*if (!permission) ... 
-
-  if (!permission.granted) ... */
-
-  
 }
+
 const HomeScreen = ({navigation}) => <View><Text>Accueil</Text></View>
 const PhotoScreen = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -48,6 +46,9 @@ const PhotoScreen = () => {
     if (camera) {
       const { uri } = await camera.takePictureAsync();
       const asset = await MediaLibrary.createAssetAsync(uri);
+      if (asset || true){
+        ToastAndroid.show('Photo sauvegardé!', ToastAndroid.SHORT);
+      }
     }
   };
 
@@ -58,8 +59,7 @@ const PhotoScreen = () => {
     requestPicturePermission();
   }
   
-  return <View>   
-    <Text>Photo</Text>
+  return <View>
     <View style={styles.container}>
       {permission && permission.granted ? <Camera style={styles.camera} type={type} zoom={zoom} ref={(ref) => { camera = ref }}>
         <View style={styles.buttonContainer}>
@@ -94,12 +94,14 @@ const AudioScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 400,
-    height: 400
+    height: "100%",
+    width: "100%",
   },
   camera: {
-    width:400,
-    height: 500
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center',
+    alignSelf:'stretch'
   },
   buttonContainer: {
     flex: 1,
