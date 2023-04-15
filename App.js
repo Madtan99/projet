@@ -78,18 +78,22 @@ const PhotoScreen = () => {
   </View>
 }
 const AudioScreen = () => {
-
+  const [audioPerm, requestAudioPerm] = Audio.requestPermissionsAsync();
+  const [recording, setRecording] = useState();
   async function record(){
     await Audio.requestPermissionsAsync();
-    const {sound} = await Audio.Sound.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+    const {recording} = await Audio.Sound.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
     
+    if(!audioPerm) requestAudioPerm();
+
+    setRecording(recording);
   }
   
   return <Vew>
-    <Text>Audio</Text>
-    <View style={styles.container}>
-    </View>
-  </Vew>
+          <Text>Audio</Text>
+          <View style={styles.container}>
+          </View>
+        </Vew>
 }
 
 const styles = StyleSheet.create({
