@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity } from 'react-native';
+import * as MediaLibrary from 'expo-media-library';
 import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 
@@ -26,8 +27,10 @@ export default function App() {
 const HomeScreen = ({navigation}) => <View><Text>Accueil</Text></View>
 const PhotoScreen = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [picturePermission, requestPicturePermission] = MediaLibrary.usePermissions();
   const [type, setType] = useState(CameraType.back);
   const [zoom, setZoom] = useState(0);
+  var camera;
 
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
@@ -37,15 +40,33 @@ const PhotoScreen = () => {
     setZoom(zoom == 1 ? 0 : 1);
   }
 
-  requestPermission();
+  async function takePicture() {
+    if (!picturePermission){
+      requestPicturePermission();
+    }
+    if (camera) {
+      const { uri } = await camera.takePictureAsync();
+      const asset = await MediaLibrary.createAssetAsync(uri);
+    }
+  };
+
+  if (!permission){
+    requestPermission();
+  }
+  if (!picturePermission){
+    requestPicturePermission();
+  }
   
   return <View>   
     <Text>Photo</Text>
     <View style={styles.container}>
-      {permission && permission.granted ? <Camera style={styles.camera} type={type} zoom={zoom}>
+      {permission && permission.granted ? <Camera style={styles.camera} type={type} zoom={zoom} ref={(ref) => { camera = ref }}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             <Text style={styles.text}>Flip Camera</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={takePicture}>
+            <Text style={styles.text}>Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={toggleZoom}>
             <Text style={styles.text}>Zoom</Text>
