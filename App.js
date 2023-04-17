@@ -99,7 +99,13 @@ const AudioScreen = () => {
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
     const asset = await MediaLibrary.createAssetAsync(uri);
-    if(asset) ToastAndroid.show('Audio sauvegardé!', ToastAndroid.SHORT);
+    if(asset) ToastAndroid.show(`Audio sauvegardé ${uri}!`, ToastAndroid.LONG);
+  }
+
+  async function playRecordedAudio(){
+    //access mediaLibrary to get the recorded audio
+    //https://docs.expo.dev/versions/latest/sdk/media-library/
+    //https://docs.expo.dev/versions/latest/sdk/audio/#api
   }
   
   return <View>
