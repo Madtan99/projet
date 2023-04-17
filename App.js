@@ -78,15 +78,16 @@ const PhotoScreen = () => {
   </View>
 }
 const AudioScreen = () => {
-  const [audioPerm, requestAudioPerm] = Audio.requestPermissionsAsync();
+  const [audioPerm, requestAudioPerm] = useState(Audio.requestPermissionsAsync());
+  const [storagePermission, requestStoragePermission] = MediaLibrary.usePermissions();
   const [recording, setRecording] = useState();
   async function startRecording(){
     try{
       await Audio.requestPermissionsAsync();
-      const {recording} = await Audio.Sound.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+      const {recording} = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
       
       if(!audioPerm) requestAudioPerm();
-  
+      if(!storagePermission) requestStoragePermission;
       setRecording(recording);
     }
     catch(error){
@@ -97,14 +98,17 @@ const AudioScreen = () => {
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
+    const asset = await MediaLibrary.createAssetAsync(uri);
+    if(asset) ToastAndroid.show('Audio sauvegardé!', ToastAndroid.SHORT);
   }
   
-  return <Vew>
+  return <View>
           <Text>Audio</Text>
           <View style={styles.container}>
             <Button title={recording ? 'Stop Recording' : 'Start Recording'} onPress={recording? stopRecording : startRecording}></Button>
           </View>
-        </Vew>
+        </View>
+        
 }
 
 const styles = StyleSheet.create({
