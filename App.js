@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity, ToastAndroid } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
@@ -29,6 +29,7 @@ const PhotoScreen = () => {
   const [picturePermission, requestPicturePermission] = MediaLibrary.usePermissions();
   const [type, setType] = useState(CameraType.back);
   const [zoom, setZoom] = useState(0);
+  const isFocused = useIsFocused();
   var camera;
 
   function toggleCameraType() {
@@ -61,7 +62,7 @@ const PhotoScreen = () => {
   
   return <View>
     <View style={styles.container}>
-      {permission && permission.granted ? <Camera style={styles.camera} type={type} zoom={zoom} ref={(ref) => { camera = ref }}>
+      {permission && permission.granted && isFocused ? <Camera style={styles.camera} type={type} zoom={zoom} ref={(ref) => { camera = ref }}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
             <Text style={styles.text}>Flip Camera</Text>
@@ -83,7 +84,7 @@ const AudioScreen = () => {
   const [recording, setRecording] = useState();
   async function startRecording(){
     try{
-      await Audio.requestPermissionsAsync();
+      //await Audio.requestPermissionsAsync();
       const {recording} = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
       
       if(!audioPerm) requestAudioPerm();
@@ -91,7 +92,7 @@ const AudioScreen = () => {
       setRecording(recording);
     }
     catch(error){
-      console.error("Tentative d'enregistrement à échoué", error);
+      console.log("Tentative d'enregistrement à échoué", error);
     }
   }
   async function stopRecording(){
