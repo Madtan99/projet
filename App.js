@@ -110,9 +110,9 @@ const AudioScreen = () => {
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
     setUri(recording.getURI());
-    const asset = await MediaLibrary.createAssetAsync(uri);
+    //const asset = await MediaLibrary.createAssetAsync(uri);
     //console.log(uri);
-    if(asset) ToastAndroid.show(`Audio sauvegardé ${uri}!`, ToastAndroid.LONG);
+    if(uri) ToastAndroid.show(`Audio sauvegardé ${uri}!`, ToastAndroid.LONG);
   }
 
   async function playRecordedAudio(){
@@ -120,7 +120,8 @@ const AudioScreen = () => {
     //try{
       //const s = new Audio.Sound();
       //const player = await Audio.Sound.
-      const player = await Audio.Sound.loadAsync(recording);
+      console.log(sound);
+      const player = recording.createNewLoadedSoundAsync(sound.uri);
       console.log(player);
       if(sound != null){
         await sound.setPostionAsync(0);
