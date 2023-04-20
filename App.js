@@ -105,10 +105,11 @@ const AudioScreen = () => {
       console.log("Tentative d'enregistrement à échoué", error);
     }
   }
-  async function stopRecording(){
-    setSound(recording);  
+  async function stopRecording(){ 
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
+    const {sound} = await recording.createNewLoadedSoundAsync();
+    setSound(sound); 
     setUri(recording.getURI());
     //const asset = await MediaLibrary.createAssetAsync(uri);
     //console.log(uri);
@@ -120,12 +121,10 @@ const AudioScreen = () => {
     //try{
       //const s = new Audio.Sound();
       //const player = await Audio.Sound.
-      console.log(sound);
-      const player = recording.createNewLoadedSoundAsync(sound.uri);
-      console.log(player);
+      console.log(sound); 
       if(sound != null){
-        await sound.setPostionAsync(0);
-        await sound.playAsync();
+        //await sound.setPostionAsync(0);
+        await sound.replayAsync();
       }
       //await s.loadAsync(sound);
       //console.log(test);
