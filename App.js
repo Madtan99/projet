@@ -29,7 +29,7 @@ export default function App() {
   );
 }
 
-const HomeScreen = ({navigation}) => <View><Text>Accueil</Text></View>
+const HomeScreen = ({navigation}) => <View><Text>Accueil</Text><Text>Noms des coéquipiers</Text><Text>Sammy Gailloux et Marc-Antoine Duquette</Text></View>
 const PhotoScreen = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [picturePermission, requestPicturePermission] = MediaLibrary.usePermissions();
