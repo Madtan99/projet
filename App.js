@@ -7,6 +7,12 @@ import { useState } from 'react';
 import { Audio } from 'expo-av';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
+//////////////////////////////////////////////////////////////
+//                Noms des coéquipiers
+//       Sammy Gailloux      Marc-Antoine Duquette
+/////////////////////////////////////////////////////////////
+
 const Tab = createBottomTabNavigator();
 export default function App() {
   return (
@@ -82,11 +88,15 @@ const AudioScreen = () => {
   const [audioPerm, requestAudioPerm] = useState(Audio.requestPermissionsAsync());
   const [storagePermission, requestStoragePermission] = MediaLibrary.usePermissions();
   const [recording, setRecording] = useState();
+  const [uri, setUri] = useState();
+  const [sound, setSound] = useState();
   async function startRecording(){
     try{
-      //await Audio.requestPermissionsAsync();
       const {recording} = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-      
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
       if(!audioPerm) requestAudioPerm();
       if(!storagePermission) requestStoragePermission;
       setRecording(recording);
@@ -96,15 +106,34 @@ const AudioScreen = () => {
     }
   }
   async function stopRecording(){
+    setSound(recording);  
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
-    const uri = recording.getURI();
+    setUri(recording.getURI());
     const asset = await MediaLibrary.createAssetAsync(uri);
+    //console.log(uri);
     if(asset) ToastAndroid.show(`Audio sauvegardé ${uri}!`, ToastAndroid.LONG);
   }
 
   async function playRecordedAudio(){
     //access mediaLibrary to get the recorded audio
+    //try{
+      //const s = new Audio.Sound();
+      //const player = await Audio.Sound.
+      const player = await Audio.Sound.loadAsync(recording);
+      console.log(player);
+      if(sound != null){
+        await sound.setPostionAsync(0);
+        await sound.playAsync();
+      }
+      //await s.loadAsync(sound);
+      //console.log(test);
+      //await sound.playAsync();
+      //await sound.unloadAsync();
+    //}
+    //catch(error){
+    //  console.log("test", error);
+    //}
     //https://docs.expo.dev/versions/latest/sdk/media-library/
     //https://docs.expo.dev/versions/latest/sdk/audio/#api
   }
@@ -113,6 +142,7 @@ const AudioScreen = () => {
           <Text>Audio</Text>
           <View style={styles.container}>
             <Button title={recording ? 'Stop Recording' : 'Start Recording'} onPress={recording? stopRecording : startRecording}></Button>
+            <Button title={"Replay recorded audio"} onPress={playRecordedAudio}></Button>
           </View>
         </View>
         
@@ -122,6 +152,12 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
+  },
+  visible:{
+    visibility:'visible',
+  },
+  hidden:{
+    display: 'none',
   },
   camera: {
     flex:1,
