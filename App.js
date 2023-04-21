@@ -66,6 +66,8 @@ const PhotoScreen = () => {
     requestPicturePermission();
   }
   
+  //https://docs.expo.dev/versions/latest/sdk/camera/
+  
   return <View>
     <View style={styles.container}>
       {permission && permission.granted && isFocused ? <Camera style={styles.camera} type={type} zoom={zoom} ref={(ref) => { camera = ref }}>
