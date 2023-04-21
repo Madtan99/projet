@@ -102,7 +102,8 @@ const AudioScreen = () => {
       setRecording(recording);
     }
     catch(error){
-      console.log("Tentative d'enregistrement à échoué", error);
+      ToastAndroid.show('Tentative d\'enregistrement à échoué', ToastAndroid.SHORT);
+      //console.log("", error);
     }
   }
   async function stopRecording(){ 
