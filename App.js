@@ -11,6 +11,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 //////////////////////////////////////////////////////////////
 //                Noms des coéquipiers
 //       Sammy Gailloux      Marc-Antoine Duquette
+//
+//  Sources:
+//  //https://docs.expo.dev/versions/latest/sdk/media-library/
+//  //https://docs.expo.dev/versions/latest/sdk/audio/#api
+//  //https://docs.expo.dev/versions/latest/sdk/camera/
 /////////////////////////////////////////////////////////////
 
 const Tab = createBottomTabNavigator();
@@ -65,8 +70,7 @@ const PhotoScreen = () => {
   if (!picturePermission){
     requestPicturePermission();
   }
-  
-  //https://docs.expo.dev/versions/latest/sdk/camera/
+ 
   
   return <View>
     <View style={styles.container}>
